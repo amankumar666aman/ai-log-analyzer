@@ -36,7 +36,7 @@ def analyze():
     result = analyze_logs(log_store)
     # Anomaly count karo
     if "anomalies" in result:
-        ANOMALY_COUNTER.inc(len(result["anomalies"]))
+        ANOMALY_COUNTER.inc(result["anomalies"])
     return jsonify(result), 200
 
 @app.route("/logs", methods=["GET"])
