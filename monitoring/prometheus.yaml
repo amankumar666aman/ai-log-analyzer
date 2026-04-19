@@ -1,0 +1,30 @@
+global:
+  scrape_interval: 15s      # Har 15 second mein metrics lo
+  evaluation_interval: 15s
+
+scrape_configs:
+  # ─────────────────────────────────────────
+  # Prometheus khud ko monitor kare
+  # ─────────────────────────────────────────
+  - job_name: 'prometheus'
+    static_configs:
+      - targets: ['localhost:9090']
+
+  # ─────────────────────────────────────────
+  # Flask AI App ke metrics
+  # ─────────────────────────────────────────
+  - job_name: 'ai-log-analyzer'
+    static_configs:
+      - targets: ['ai-log-analyzer-service:80']
+    metrics_path: '/health'
+    scrape_interval: 30s
+
+  # ─────────────────────────────────────────
+  # Kubernetes nodes monitor karo
+  # ─────────────────────────────────────────
+  - job_name: 'kubernetes-nodes'
+    kubernetes_sd_configs:
+      - role: node
+    relabel_configs:
+      - action: labelmap
+        regex: __meta_kubernetes_node_label_(.+)

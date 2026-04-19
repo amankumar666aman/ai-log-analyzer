@@ -1,0 +1,35 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: ai-log-analyzer
+  namespace: argocd
+spec:
+  # ─────────────────────────────────────────
+  # Project
+  # ─────────────────────────────────────────
+  project: default
+
+  # ─────────────────────────────────────────
+  # Source — GitHub repo
+  # ─────────────────────────────────────────
+  source:
+    repoURL: https://github.com/your-username/ai-log-analyzer   # <-- apna repo
+    targetRevision: main
+    path: k8s                  # k8s/ folder ke YAML files use karega
+
+  # ─────────────────────────────────────────
+  # Destination — Kubernetes cluster
+  # ─────────────────────────────────────────
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: default
+
+  # ─────────────────────────────────────────
+  # Sync policy — auto deploy on git push
+  # ─────────────────────────────────────────
+  syncPolicy:
+    automated:
+      prune: true        # Purani resources delete karo
+      selfHeal: true     # Manual changes auto revert karo
+    syncOptions:
+      - CreateNamespace=true

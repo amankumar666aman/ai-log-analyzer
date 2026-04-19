@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: ai-log-analyzer-service
+  labels:
+    app: ai-log-analyzer
+spec:
+  type: NodePort          # Minikube pe bahar se access karne ke liye
+  selector:
+    app: ai-log-analyzer  # Deployment se match karta hai
+  ports:
+    - protocol: TCP
+      port: 80            # Service ka port
+      targetPort: 5000    # Container ka port
+      nodePort: 30080     # Bahar se access: minikube-ip:30080
