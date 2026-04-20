@@ -5,7 +5,7 @@ metadata:
   labels:
     app: ai-log-analyzer
 spec:
-  replicas: 2                        # 2 copies chalenge
+  replicas: 2
   selector:
     matchLabels:
       app: ai-log-analyzer
@@ -16,16 +16,13 @@ spec:
     spec:
       containers:
         - name: ai-log-analyzer
-          image: ai-log-analyzer:latest
-          imagePullPolicy: Never     # Local image use karo (minikube)
+          image: devops734/ai-log-analyzer:latest
+          imagePullPolicy: Always
           ports:
             - containerPort: 5000
           env:
             - name: PYTHONUNBUFFERED
               value: "1"
-          # ─────────────────────────────
-          # Health checks
-          # ─────────────────────────────
           livenessProbe:
             httpGet:
               path: /health
@@ -38,9 +35,6 @@ spec:
               port: 5000
             initialDelaySeconds: 5
             periodSeconds: 10
-          # ─────────────────────────────
-          # Resource limits
-          # ─────────────────────────────
           resources:
             requests:
               memory: "128Mi"
